@@ -1,0 +1,1 @@
+Iniciar a configuração do Prisma: npx prisma init
