@@ -46,7 +46,7 @@ model Subscription {
 model Haircut {
   id     String  @id @default(uuid())
   name   String
-  price  String
+  price  Float
   status Boolean @default(true)
 
   create_at DateTime? @default(now())
