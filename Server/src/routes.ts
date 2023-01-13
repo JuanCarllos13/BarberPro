@@ -14,6 +14,10 @@ import { CheckSubscriptionController } from "./controllers/hairCut/CheckSubscrip
 import { CountHairCutController } from "./controllers/hairCut/CountHairCutController";
 import { DetailHairCutController } from "./controllers/hairCut//DetailHairCutController";
 
+import {NewScheduleController} from './controllers/schedule/NewScheduleController'
+import {ListScheduleController} from './controllers/schedule/ListScheduleController'
+import {FinishScheduleController} from './controllers/schedule/FinishScheduleController'
+
 const router = Router();
 
 // Rotas User
@@ -30,5 +34,11 @@ router.put("/haircut", isAuthenticated, new UpdateHairCutController().handle);
 router.get("/haircut/check", isAuthenticated, new CheckSubscriptionController().handle);
 router.get("/haircut/count", isAuthenticated, new CountHairCutController().handle);
 router.get("/haircut/detail", isAuthenticated, new DetailHairCutController().handle);
+
+// SCHEDULE
+
+router.post("/schedule", isAuthenticated, new NewScheduleController().handle)
+router.get("/schedule", isAuthenticated, new ListScheduleController().handle)
+router.delete("/schedule", isAuthenticated, new FinishScheduleController().handle)
 
 export { router };
