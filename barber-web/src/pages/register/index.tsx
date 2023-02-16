@@ -1,16 +1,30 @@
-import React, { use, useState } from "react";
+import React, { use, useContext, useState } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import LogoImg from "../../../public/image/logo.svg";
 import { Flex, Text, Center, Input, Button } from "@chakra-ui/react";
 import Link from "next/link";
+import { AuthContext } from "@/contexts/AuthContext";
+import { canSSRGuest } from "@/utils/canSSRGuest";
 
 export default function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = () => {};
+  const { signUp } = useContext(AuthContext);
+
+  const handleSubmit = async () => {
+    if (name === "" && email === "" && password === "") {
+      return;
+    }
+
+    await signUp({
+      email,
+      name,
+      password,
+    });
+  };
 
   return (
     <>
@@ -35,33 +49,36 @@ export default function Register() {
 
           <Input
             background="barber.400"
+            color="button.default"
             variant="filled"
             size="lg"
+            placeholder="Nome da barbearia"
             type="text"
             mb={3}
-            placeholder="Nome da barbearia"
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
 
           <Input
             background="barber.400"
+            color="button.default"
             variant="filled"
             size="lg"
+            placeholder="email@email.com"
             type="email"
             mb={3}
-            placeholder="email@gmail.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
 
           <Input
             background="barber.400"
+            color="button.default"
             variant="filled"
             size="lg"
+            placeholder="********"
             type="password"
-            mb={3}
-            placeholder="*********"
+            mb={6}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
@@ -89,3 +106,9 @@ export default function Register() {
     </>
   );
 }
+
+export const getServerSideProps = canSSRGuest(async (ctx) => {
+  return {
+    props: {},
+  };
+});

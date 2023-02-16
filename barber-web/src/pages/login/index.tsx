@@ -5,6 +5,7 @@ import LogoImg from "../../../public/image/logo.svg";
 import { Flex, Text, Center, Input, Button } from "@chakra-ui/react";
 import Link from "next/link";
 import { AuthContext } from "../../contexts/AuthContext";
+import { canSSRGuest } from "../../utils/canSSRGuest";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -12,6 +13,10 @@ export default function Login() {
   const { signIn } = useContext(AuthContext);
 
   const handleSubmit = async () => {
+    if (email === "" && password === "") {
+      return;
+    }
+
     await signIn({ email, password });
   };
 
@@ -38,22 +43,24 @@ export default function Login() {
 
           <Input
             background="barber.400"
+            color="button.default"
             variant="filled"
             size="lg"
+            placeholder="email@email.com"
             type="email"
             mb={3}
-            placeholder="email@gmail.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
 
           <Input
             background="barber.400"
+            color="button.default"
             variant="filled"
             size="lg"
+            placeholder="********"
             type="password"
-            mb={3}
-            placeholder="*********"
+            mb={6}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
@@ -81,3 +88,9 @@ export default function Login() {
     </>
   );
 }
+
+export const getServerSideProps = canSSRGuest(async (ctx) => {
+  return {
+    props: {},
+  };
+});
