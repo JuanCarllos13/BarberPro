@@ -1,24 +1,24 @@
-import { Request, Response } from "express";
-import { UpdateHairCutService } from "../../services/haircut/UpdateHairCutService";
+import {Request, Response} from 'express'
+import { UpdateHaircutService } from '../../services/haircut/UpdateHaircutService'
 
-class UpdateHairCutController {
-  async handle(request: Request, response: Response) {
+class UpdateHaircutController{
+  async handle(request: Request, response: Response){
     const user_id = request.user_id;
-
     const { name, price, status, haircut_id } = request.body;
 
-    const updateHairCut = new UpdateHairCutService();
+    const updateHaircut = new UpdateHaircutService();
 
-    const haircut = await updateHairCut.execute({
-      haircut_id,
+    const haircut = await updateHaircut.execute({
+      user_id,
       name,
       price,
       status,
-      user_id,
-    });
+      haircut_id
+    })
 
-    return response.json(haircut)
+    return response.json(haircut);
+
   }
 }
 
-export { UpdateHairCutController };
+export { UpdateHaircutController }

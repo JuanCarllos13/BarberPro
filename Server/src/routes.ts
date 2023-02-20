@@ -1,44 +1,50 @@
-import { Router } from "express";
+import { Router, Request, Response } from 'express'
 
-import { isAuthenticated } from "./middlewares/isAuthenticated";
+import { CreateUserController } from './controllers/user/CreateUserController'
+import { AuthUserController } from './controllers/user/AuthUserController'
+import { DetailUserController } from './controllers/user/DetailUserController'
+import { UpdateUserController } from './controllers/user/UpdateUserController'
 
-import { CreateUserController } from "./controllers/user/CreateUserController";
-import { AuthUserController } from "./controllers/user/AuthUserController";
-import { DetailUserController } from "./controllers/user/DetailUserController";
-import { UpdateUserController } from "./controllers/user/UpdateUserController";
+import { CreateHaircutController } from './controllers/haircut/CreateHaircutController'
+import { ListHaircutController } from './controllers/haircut/ListHaircutController'
+import { UpdateHaircutController } from './controllers/haircut/UpdateHaircutController'
+import { CheckSubscriptionController } from './controllers/haircut/CheckSubscriptionController'
+import { CountHaircutsController } from './controllers/haircut/CountHaircutsController'
+import { DetailHaircutController } from './controllers/haircut/DetailHaircutController'
 
-import { CreateHairCutController } from "./controllers/hairCut/CreateHairCutController";
-import { ListHairCutController } from "./controllers/hairCut/ListHairCutController";
-import { UpdateHairCutController } from "./controllers/hairCut/UpdateHairCutController";
-import { CheckSubscriptionController } from "./controllers/hairCut/CheckSubscriptionController";
-import { CountHairCutController } from "./controllers/hairCut/CountHairCutController";
-import { DetailHairCutController } from "./controllers/hairCut//DetailHairCutController";
+import { NewScheduleController } from './controllers/schedule/NewScheduleController'
+import { ListScheduleController } from './controllers/schedule/ListScheduleController'
+import { FinishScheduleController } from './controllers/schedule/FinishScheduleController'
 
-import {NewScheduleController} from './controllers/schedule/NewScheduleController'
-import {ListScheduleController} from './controllers/schedule/ListScheduleController'
-import {FinishScheduleController} from './controllers/schedule/FinishScheduleController'
+import { SubscribeController } from './controllers/subscription/SubscribeController'
+import { WebhooksController } from './controllers/subscription/WebhooksController'
+
+import { isAuthenticated } from './middlewares/isAuthenticated'
 
 const router = Router();
 
-// Rotas User
+// --- ROTAS USER ---
+router.post('/users', new CreateUserController().handle)
+router.post('/session', new AuthUserController().handle)
+router.get('/me', isAuthenticated, new DetailUserController().handle)
+router.put('/users', isAuthenticated, new UpdateUserController().handle)
 
-router.post("/users", new CreateUserController().handle);
-router.post("/session", new AuthUserController().handle);
-router.get("/me", isAuthenticated, new DetailUserController().handle);
-router.put("/users", isAuthenticated, new UpdateUserController().handle);
+// --- ROTA HAIRCUTS ---
+router.post('/haircut', isAuthenticated, new CreateHaircutController().handle )
+router.get('/haircuts', isAuthenticated, new ListHaircutController().handle)
+router.put('/haircut', isAuthenticated, new UpdateHaircutController().handle)
+router.get('/haircut/check', isAuthenticated, new CheckSubscriptionController().handle)
+router.get('/haircut/count', isAuthenticated, new CountHaircutsController().handle)
+router.get('/haircut/detail', isAuthenticated, new DetailHaircutController().handle)
 
-// HAIRCUT
-router.post("/haircut", isAuthenticated, new CreateHairCutController().handle);
-router.get("/haircuts", isAuthenticated, new ListHairCutController().handle);
-router.put("/haircut", isAuthenticated, new UpdateHairCutController().handle);
-router.get("/haircut/check", isAuthenticated, new CheckSubscriptionController().handle);
-router.get("/haircut/count", isAuthenticated, new CountHairCutController().handle);
-router.get("/haircut/detail", isAuthenticated, new DetailHairCutController().handle);
+// --- ROTA SCHEDULE / SERVIÇOS ---
+router.post('/schedule', isAuthenticated, new NewScheduleController().handle)
+router.get('/schedule', isAuthenticated, new ListScheduleController().handle)
+router.delete('/schedule', isAuthenticated, new FinishScheduleController().handle)
 
-// SCHEDULE
+// --- ROTAS PAGAMENTOS ---
+router.post('/subscribe', isAuthenticated, new SubscribeController().handle)
+router.post('/webhooks', new WebhooksController().handle)
 
-router.post("/schedule", isAuthenticated, new NewScheduleController().handle)
-router.get("/schedule", isAuthenticated, new ListScheduleController().handle)
-router.delete("/schedule", isAuthenticated, new FinishScheduleController().handle)
 
 export { router };

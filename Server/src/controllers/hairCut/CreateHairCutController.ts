@@ -1,21 +1,22 @@
-import { Request, Response } from "express";
-import { CreateHairCutService } from "../../services/haircut/CreateHairCutSerivce";
+import {Request, Response} from 'express'
+import { CreateHaircutService } from '../../services/haircut/CreateHaircutService'
 
-class CreateHairCutController {
-  async handle(request: Request, response: Response) {
+class CreateHaircutController{
+  async handle(request: Request, response: Response){
     const { name, price } = request.body;
     const user_id = request.user_id;
 
-    const createHaircutService = new CreateHairCutService();
+    const createHaircutService = new CreateHaircutService();
 
     const haircut = await createHaircutService.execute({
+      user_id,
       name,
       price,
-      user_id,
-    });
+    })
 
-    return response.json(haircut);
+    return response.json(haircut)
+
   }
 }
 
-export { CreateHairCutController };
+export { CreateHaircutController }

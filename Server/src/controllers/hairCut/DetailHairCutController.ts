@@ -1,18 +1,19 @@
 import { Request, Response } from "express";
-import { DetailHairCutService } from "../../services/haircut/DetailHairCutService";
+import { DetailHaircutService } from '../../services/haircut/DetailHaircutService'
 
-class DetailHairCutController {
-  async handle(request: Request, response: Response) {
+class DetailHaircutController{
+  async handle(request: Request, response: Response){
     const haircut_id = request.query.haircut_id as string;
 
-    const detailHairCut = new DetailHairCutService();
+    const detailHaircut = new DetailHaircutService();
 
-    const hairCut = await detailHairCut.execute({
+    const haircut = await detailHaircut.execute({
       haircut_id,
-    });
+    })
 
-    response.json(hairCut);
+    return response.json(haircut)
+
   }
 }
 
-export { DetailHairCutController };
+export { DetailHaircutController }

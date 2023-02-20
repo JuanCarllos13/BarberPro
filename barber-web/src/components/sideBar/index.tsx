@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode } from 'react'
 import {
   IconButton,
   Box,
@@ -11,34 +11,40 @@ import {
   Text,
   useDisclosure,
   BoxProps,
-  FlexProps,
-} from "@chakra-ui/react";
+  FlexProps
+} from '@chakra-ui/react'
 
-import { FiScissors, FiClipboard, FiSettings, FiMenu } from "react-icons/fi";
-import { IconType } from "react-icons";
+import {
+  FiScissors,
+  FiClipboard,
+  FiSettings,
+  FiMenu
+ } from 'react-icons/fi'
+import { IconType } from 'react-icons' 
 
-import Link from "next/link";
+import Link from 'next/link'
 
-interface LinkItemProps {
+interface LinkItemProps{
   name: string;
   icon: IconType;
   route: string;
 }
 
 const LinkItems: Array<LinkItemProps> = [
-  { name: "Agenda", icon: FiScissors, route: "/dashboard" },
-  { name: "Cortes", icon: FiClipboard, route: "/haircuts" },
-  { name: "Minha Conta", icon: FiSettings, route: "/profile" },
-];
+  { name: 'Agenda', icon: FiScissors, route: '/dashboard' },
+  { name: 'Cortes', icon: FiClipboard, route: '/haircuts' },
+  { name: 'Minha Conta', icon: FiSettings, route: '/profile' },
+]
 
-export function Sidebar({ children }: { children: ReactNode }) {
+export function Sidebar({ children }: { children: ReactNode }){
+
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  return (
+  return(
     <Box minH="100vh" bg="barber.900">
       <SidebarContent
         onClose={() => onClose}
-        display={{ base: "none", md: "block" }}
+        display={{ base: 'none', md: 'block' }}
       />
 
       <Drawer
@@ -51,70 +57,54 @@ export function Sidebar({ children }: { children: ReactNode }) {
         onClose={onClose}
       >
         <DrawerContent>
-          <SidebarContent onClose={() => onClose()} color="white" />
+          <SidebarContent onClose={() => onClose()} />
         </DrawerContent>
       </Drawer>
 
-      <MobileNav display={{ base: "flex", md: "none" }} onOpen={onOpen} />
+
+      <MobileNav display={{ base: 'flex', md: 'none' }} onOpen={onOpen} />
       <Box ml={{ base: 0, md: 60 }} p={4}>
         {children}
       </Box>
     </Box>
-  );
+  )
 }
 
-interface SidebarProps extends BoxProps {
+interface SidebarProps extends BoxProps{
   onClose: () => void;
 }
 
-const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
+const SidebarContent = ({onClose, ...rest}: SidebarProps) => {
   return (
     <Box
       bg="barber.400"
       borderRight="1px"
-      borderRightColor={useColorModeValue("gray.200", "gray.700")}
-      w={{ base: "full", md: 60 }}
+      borderRightColor={useColorModeValue('gray.200', 'gray.700')}
+      w={{ base: 'full', md: 60 }}
       pos="fixed"
       h="full"
       {...rest}
     >
+
       <Flex h="20" alignItems="center" justifyContent="space-between" mx="8">
         <Link href="/dashboard">
           <Flex cursor="pointer" userSelect="none" flexDirection="row">
-            <Text
-              fontSize="2xl"
-              fontFamily="monospace"
-              fontWeight="bold"
-              color="white"
-            >
-              Barber
-            </Text>
-            <Text
-              fontSize="2xl"
-              fontFamily="monospace"
-              fontWeight="bold"
-              color="button.cta"
-            >
-              PRO
-            </Text>
+            <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">Barber</Text>
+            <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold" color="button.cta">PRO</Text>
           </Flex>
         </Link>
-        <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
+        <CloseButton display={{ base: 'flex', md: 'none'}} onClick={onClose} />
       </Flex>
 
-      {LinkItems.map((link) => (
-        <NavItem
-          icon={link.icon}
-          route={link.route}
-          key={link.name}
-          color="white"
-        >
-          {link.name}
+      {LinkItems.map(link => (
+        <NavItem icon={link.icon} route={link.route} key={link.name}>
+           {link.name} 
         </NavItem>
       ))}
+
     </Box>
-  );
-};
+  )
+}
 
 interface NavItemProps extends FlexProps {
   icon: IconType;
@@ -122,83 +112,72 @@ interface NavItemProps extends FlexProps {
   route: string;
 }
 
-const NavItem = ({ icon, children, route, ...rest }: NavItemProps) => {
-  return (
-    <Link href={route} style={{ textDecoration: "none" }}>
-      <Flex
-        align="center"
-        p="4"
-        mx="4"
-        borderRadius="lg"
-        role="group"
-        cursor="pointer"
-        _hover={{
-          bg: "barber.900",
-          color: "white",
+const NavItem = ({icon, children, route, ...rest}: NavItemProps) => {
+  return(
+    <Link href={route} style={{ textDecoration: 'none'}} >
+    <Flex
+      align="center"
+      p="4"
+      mx="4"
+      borderRadius="lg"
+      role="group"
+      cursor="pointer"
+      _hover={{
+        bg: 'barber.900',
+        color: 'white'
+      }}
+      {...rest}
+    >
+     
+     {icon && (
+      <Icon
+        mr={4}
+        fontSize="16"
+        as={icon}
+        _groupHover={{
+          color: 'white'
         }}
-        {...rest}
-      >
-        {icon && (
-          <Icon
-            mr={4}
-            fontSize="16"
-            as={icon}
-            color="white"
-            _groupHover={{
-              color: "white",
-            }}
-          />
-        )}
-        {children}
-      </Flex>
-    </Link>
-  );
-};
+      />
+     )}
+     {children}
+    </Flex>
+  </Link>
+  )
+}
 
-interface MobileProps extends FlexProps {
+
+interface MobileProps extends FlexProps{
   onOpen: () => void;
 }
 
-const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
-  return (
+const MobileNav = ({ onOpen, ...rest }: MobileProps ) => {
+  return(
     <Flex
       ml={{ base: 0, md: 60 }}
       px={{ base: 4, md: 24 }}
       height="20"
       alignItems="center"
-      bg="barber.400"
+      bg={useColorModeValue('white', 'gray.900')}
       borderBottomWidth="1px"
-      borderBottomColor={useColorModeValue("gray.200", "gray.700")}
+      borderBottomColor={useColorModeValue('gray.200', 'gray.700')}
       justifyContent="flex-start"
       {...rest}
     >
       <IconButton
         variant="outline"
-        color="white"
         onClick={onOpen}
         aria-label="open menu"
-        icon={<FiMenu />}
+        icon={ <FiMenu/> }
       />
-
+  
       <Flex flexDirection="row">
-        <Text
-          ml={8}
-          fontSize="2xl"
-          fontFamily="monospace"
-          fontWeight="bold"
-          color="white"
-        >
+        <Text ml={8} fontSize="2xl" fontFamily="monospace" fontWeight="bold">
           Barber
         </Text>
-        <Text
-          fontSize="2xl"
-          fontFamily="monospace"
-          fontWeight="bold"
-          color="button.cta"
-        >
+        <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold" color="button.cta">
           PRO
         </Text>
       </Flex>
     </Flex>
-  );
-};
+  )
+}

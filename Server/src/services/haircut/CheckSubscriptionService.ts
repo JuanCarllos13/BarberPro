@@ -1,28 +1,29 @@
 import prismaClient from "../../prisma";
 
-interface CheckSubscription {
+interface CheckSubscription{
   user_id: string;
 }
 
-class CheckSubscriptionService {
-  async execute({ user_id }: CheckSubscription) {
+class CheckSubscriptionService{
+  async execute({ user_id }: CheckSubscription){
+
     const status = await prismaClient.user.findFirst({
-      where: {
-        id: user_id,
+      where:{
+        id: user_id
       },
-      select: {
-        subscriptions: {
-          select: {
+      select:{
+        subscriptions:{
+          select:{
             id: true,
             status: true,
-          },
-        },
-      },
-    });
+          }
+        }
+      }
+    })
 
+    return status;
 
-    return status
   }
 }
 
-export { CheckSubscriptionService };
+export { CheckSubscriptionService }

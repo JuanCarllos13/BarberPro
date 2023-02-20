@@ -1,59 +1,59 @@
 import prismaClient from "../../prisma";
-import { compare } from "bcryptjs";
-import { sign } from "jsonwebtoken";
+import { compare } from 'bcryptjs'
+import { sign } from 'jsonwebtoken'
 
-interface AuthUserRequest {
+interface AuthUserRequest{
   email: string;
   password: string;
-}
-class AuthUserService {
-  async execute({ email, password }: AuthUserRequest) {
+} 
+
+class AuthUserService{
+  async execute({ email, password }: AuthUserRequest){
+
     const user = await prismaClient.user.findFirst({
-      where: {
-        email: email,
+      where:{
+        email: email
       },
-      include: {
+      include:{
         subscriptions: true,
-      },
-    });
+      }
+    })
 
-    if (!user) {
-      throw new Error("Email/Password incorreto");
+    if(!user){
+      throw new Error("Email/password incorrect")
     }
 
-    const passwordMatch = await compare(password, user?.password);
+    const passwordMatch = await compare(password, user?.password)
 
-    if (!passwordMatch) {
-      throw new Error("Email/Password incorreto");
+    if(!passwordMatch){
+      throw new Error("Email/password incorrect")
     }
-
-    //Gerar  um token
 
     const token = sign(
       {
+        name: user.name,
         email: user.email,
       },
       process.env.JWT_SECRET,
       {
         subject: user.id,
-        expiresIn: "30d",
+        expiresIn: '30d'
       }
-    );
+    )
+    
 
     return {
       id: user?.id,
       name: user?.name,
       email: user?.email,
-      endereco: user.endereco,
+      endereco: user?.endereco,
       token: token,
-      subscription: user?.subscriptions
-        ? {
-            id: user.subscriptions.id,
-            status: user.subscriptions.status,
-          }
-        : null,
-    };
+      subscriptions: user.subscriptions ? {
+        id: user?.subscriptions?.id,
+        status: user?.subscriptions?.status
+      } : null
+     }
   }
 }
 
-export { AuthUserService };
+export { AuthUserService }

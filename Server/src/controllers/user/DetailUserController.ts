@@ -1,8 +1,8 @@
-import { Request, response, Response } from "express";
-import { UserDetailService } from "../../services/user/DetailsUserService";
+import {Request, Response} from 'express'
+import { UserDetailService } from '../../services/user/DetailUserService'
 
-class DetailUserController {
-  async handle(request: Request, response: Response) {
+class DetailUserController{
+  async handle(request: Request, response: Response){
     const user_id = request.user_id;
 
     const userDetailService = new UserDetailService();
@@ -10,7 +10,8 @@ class DetailUserController {
     const detailUser = await userDetailService.execute(user_id);
 
     return response.json(detailUser);
+
   }
 }
 
-export { DetailUserController };
+export { DetailUserController }

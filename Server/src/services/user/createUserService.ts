@@ -1,45 +1,47 @@
-import prismaClient from "../../prisma";
-import { hash } from "bcryptjs";
+import prismaClient from '../../prisma'
+import { hash } from 'bcryptjs'
 
-interface UserRequest {
+interface UserRequest{
   name: string;
   email: string;
   password: string;
 }
 
-class CreateUserService {
-  async execute({ name, email, password }: UserRequest) {
-    if (!email) {
-      throw new Error("email incorrect");
+class CreateUserService{
+  async execute({ name, email, password }: UserRequest ){
+    
+    if(!email){
+      throw new Error("Email incorrect");
     }
 
-    const userAlready = await prismaClient.user.findFirst({
-      where: {
-        email: email,
-      },
-    }); // verificando se já existe um email no banco de dados
+    const userAlreadyExists = await prismaClient.user.findFirst({
+      where:{
+        email: email
+      }
+    })
 
-    if (userAlready) {
-      throw new Error("User/email already exists");
+    if(userAlreadyExists){
+      throw new Error("User/Email already exists");
     }
 
-    const passwordHash = await hash(password, 8);
+    const passwordHash = await hash(password, 8)
 
     const user = await prismaClient.user.create({
-      data: {
+      data:{
         name: name,
         email: email,
-        password: passwordHash,
+        password: passwordHash
       },
-      select: {
+      select:{
         id: true,
-        name: true,
-        email: true
+        name:true,
+        email: true,
       }
-    });
+    })
 
-    return { user };
+    return user;
+
   }
 }
 
-export { CreateUserService };
+export { CreateUserService }

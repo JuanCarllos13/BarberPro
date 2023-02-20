@@ -5,9 +5,9 @@ CREATE TABLE "users" (
     "email" TEXT NOT NULL,
     "endereco" TEXT,
     "password" TEXT NOT NULL,
-    "strip_customer_id" TEXT,
-    "create_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
-    "update_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "stripe_customer_id" TEXT,
+    "created_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );
@@ -17,8 +17,8 @@ CREATE TABLE "subscriptions" (
     "id" TEXT NOT NULL,
     "status" TEXT NOT NULL,
     "priceId" TEXT NOT NULL,
-    "create_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
-    "update_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "created_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "userId" TEXT NOT NULL,
 
     CONSTRAINT "subscriptions_pkey" PRIMARY KEY ("id")
@@ -28,10 +28,10 @@ CREATE TABLE "subscriptions" (
 CREATE TABLE "haircuts" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
-    "price" TEXT NOT NULL,
+    "price" DOUBLE PRECISION NOT NULL,
     "status" BOOLEAN NOT NULL DEFAULT true,
-    "create_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
-    "update_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "created_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "user_id" TEXT NOT NULL,
 
     CONSTRAINT "haircuts_pkey" PRIMARY KEY ("id")
@@ -41,8 +41,8 @@ CREATE TABLE "haircuts" (
 CREATE TABLE "services" (
     "id" TEXT NOT NULL,
     "customer" TEXT NOT NULL,
-    "create_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
-    "update_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "created_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "haircut_id" TEXT NOT NULL,
     "user_id" TEXT NOT NULL,
 

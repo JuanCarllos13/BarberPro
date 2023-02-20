@@ -1,6 +1,6 @@
 import prismaClient from "../../prisma";
 
-interface HairCutRequest {
+interface HaircutRequest{
   user_id: string;
   haircut_id: string;
   name: string;
@@ -8,42 +8,36 @@ interface HairCutRequest {
   status: boolean | string;
 }
 
-class UpdateHairCutService {
-  async execute({
-    haircut_id,
-    name,
-    price,
-    status = true,
-    user_id,
-  }: HairCutRequest) {
-    // Verificar se o usuário é Premiou
+class UpdateHaircutService{
+  async execute({ user_id, haircut_id, name, price, status = true}:HaircutRequest){
 
     const user = await prismaClient.user.findFirst({
-      where: {
-        id: user_id,
+      where:{
+        id: user_id
       },
-      include: {
-        subscriptions: true,
-      },
-    });
+      include:{
+        subscriptions:true,
+      }
+    })
 
-    if (user?.subscriptions?.status !== "active") {
-      throw new Error("Not authorized");
+    if(user?.subscriptions?.status !== 'active'){
+      throw new Error("Not authorized")
     }
 
     const haircut = await prismaClient.haircut.update({
-      where: {
+      where:{
         id: haircut_id,
       },
-      data: {
+      data:{
         name: name,
         price: price,
         status: status === true ? true : false,
-      },
-    });
+      }
+    })
 
     return haircut;
+
   }
 }
 
-export { UpdateHairCutService };
+export { UpdateHaircutService }
