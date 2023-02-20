@@ -5,28 +5,25 @@ import { stripe } from '../../utils/stripe'
 import { saveSubscription } from '../../utils/manageSubscription'
 
 class WebhooksController {
-  async handle(request: Request, response: Response){
-    let event:Stripe.Event = request.body;
+  async handle(request: Request, response: Response) {
+    let event: Stripe.Event = request.body;
 
-    let endpointSecret: 'whsec_2efc00aef7ab6dbd76964e10f32f77253ab8201c3e277c81ebf8d577812f86e9';
+    const signature = request.headers['stripe-signature']
+    let endpointSecret = 'whsec_2efc00aef7ab6dbd76964e10f32f77253ab8201c3e277c81ebf8d577812f86e9';
 
-    if(endpointSecret){
-      const signature = request.headers['stripe-signature']
-      try{
+    try {
+      event = stripe.webhooks.constructEvent(
+        request.body,
+        signature,
+        endpointSecret
+      )
 
-        event = stripe.webhooks.constructEvent(
-          request.body,
-          signature,
-          endpointSecret
-        )
-
-      }catch(err){
-        console.log("Webhook signature failed", err.message)
-        return response.sendStatus(400);
-      }
+    } catch (err) {
+      return response.status(400).send(`"Webhook signature failed", ${err.message}`)
     }
 
-    switch(event.type){
+
+    switch (event.type) {
       case 'customer.subscription.deleted':
         const payment = event.data.object as Stripe.Subscription;
 
@@ -36,28 +33,28 @@ class WebhooksController {
           false,
           true
         )
-      
+
         break;
       case 'customer.subscription.updated':
-         const paymentIntent = event.data.object as Stripe.Subscription;
+        const paymentIntent = event.data.object as Stripe.Subscription;
 
-         await saveSubscription(
+        await saveSubscription(
           paymentIntent.id,
           paymentIntent.customer.toString(),
           false
-         )
+        )
 
-      break;
+        break;
       case 'checkout.session.completed':
         const checkoutSession = event.data.object as Stripe.Checkout.Session;
-      
+
         await saveSubscription(
           checkoutSession.subscription.toString(),
           checkoutSession.customer.toString(),
           true,
         )
 
-      break;
+        break;
       default:
         console.log(`Evento desconhecido ${event.type}`)
     }

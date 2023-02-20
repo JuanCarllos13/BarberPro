@@ -1,54 +1,71 @@
-import { useState } from 'react'
-import Head from 'next/head';
-import { Sidebar } from '../../../components/sidebar'
+import { useState, ChangeEvent } from 'react'
 
+import Head from 'next/head';
+import { Sidebar } from '../../components/sidebar'
 import {
   Flex,
   Text,
   Heading,
   Button,
-  useMediaQuery,
-  Input
+  Stack,
+  Switch,
+  useMediaQuery
 } from '@chakra-ui/react'
 
-import Link from 'next/link'
-import { FiChevronLeft } from 'react-icons/fi'
-import Router from 'next/router';
+import Link from 'next/link';
 
-import { canSSRAuth } from '../../../utils/canSSRAuth'
-import { setupAPIClient } from '../../../services/api'
+import { IoMdPricetag } from 'react-icons/io'
+import { canSSRAuth } from '../../utils/canSSRAuth'
+import { setupAPIClient } from '../../services/api'
 
-interface NewHaircutProps{
-  subscription: boolean;
-  count: number;
+interface HaircutsItem{
+  id: string;
+  name: string;
+  price: number | string;
+  status: boolean;
+  user_id: string;
 }
 
-export default function NewHaircut({ subscription, count }: NewHaircutProps){
-  const [isMobile] = useMediaQuery("(max-width: 500px)");
+interface HaircutsProps{
+  haircuts: HaircutsItem[];
+}
 
-  const [name, setName] = useState('')
-  const [price, setPrice] = useState('')
 
-  async function handleRegister(){
+export default function Haircuts({ haircuts }: HaircutsProps){
+
+  const [isMobile] = useMediaQuery("(max-width: 500px)")
+
+  const [haircutList, setHaircutList] = useState<HaircutsItem[]>(haircuts || [])
+  const [disableHaircut, setDisableHaircut] = useState("enabled")
+
+  async function handleDisable(e: ChangeEvent<HTMLInputElement>){
+    const apiClient = setupAPIClient();
     
-    if(name === '' || price === ''){
-      return;
-    }
+    if(e.target.value === 'disabled'){
 
-
-    try{
-
-      const apiClient = setupAPIClient();
-      await apiClient.post('/haircut', {
-        name: name,
-        price: Number(price),
+      setDisableHaircut("enabled")
+      
+      const response = await apiClient.get('/haircuts', {
+        params:{
+          status: true
+        }
       })
 
-      Router.push("/haircuts")
+      setHaircutList(response.data);
 
-    }catch(err){
-      console.log(err);
-      alert("Erro ao cadastrar esse modelo.")
+
+    }else{
+
+      setDisableHaircut("disabled")
+      const response = await apiClient.get('/haircuts', {
+        params:{
+          status: false
+        }
+      })
+
+      setHaircutList(response.data);
+
+
     }
 
   }
@@ -56,102 +73,77 @@ export default function NewHaircut({ subscription, count }: NewHaircutProps){
   return(
     <>
       <Head>
-        <title>BarberPRO - Novo modelo de corte</title>
+        <title>Modelos de corte - Minha barbearia</title>
       </Head>
       <Sidebar>
         <Flex direction="column" alignItems="flex-start" justifyContent="flex-start">
-          
-          <Flex
-            direction={isMobile ? "column" : "row"}
-            w="100%"
-            align={isMobile ? "flex-start" : "center"}
-            mb={isMobile ? 4 : 0}
-          >
-            <Link href="/haircuts">
-              <Button 
-              bg="gray.700" _hover={{ background: 'gray.700' }}
-              p={4} 
-              display="flex" 
-              alignItems="center" 
-              justifyItems="center" 
-              mr={4}
-              >
-                <FiChevronLeft size={24} color="#FFF"/>
-                Voltar
-              </Button>
-            </Link>
-            <Heading
-            color="orange.900"
-            mt={4}
+         
+         <Flex
+          direction={isMobile ? 'column' : 'row'}
+          w="100%"
+          alignItems={isMobile ? 'flex-start' : 'center'}
+          justifyContent="flex-start"
+          mb={0}
+         >
+          <Heading
+            fontSize={isMobile ? '28px' : "3xl"} 
+            mt={4} 
             mb={4}
             mr={4}
-            fontSize={isMobile ? "28px" : "3xl"}
-            >
-              Modelos de corte
-            </Heading>
-          </Flex>
-
-          <Flex
-            maxW="700px"
-            bg="barber.400"
-            w="100%"
-            align="center"
-            justify="center"
-            pt={8}
-            pb={8}
-            direction="column"
+            color="orange.900"
           >
-            <Heading mb={4} fontSize={isMobile ? "22px" : "3xl"} color="white">Cadastrar modelo</Heading>
+            Modelos de corte
+          </Heading>
 
-            <Input
-              placeholder="Nome do corte"
-              size="lg"
-              type="text"
-              w="85%"
-              bg="gray.900"
-              mb={3}
-              value={name}
-              onChange={(e) => setName(e.target.value) }
-            />
-
-            <Input
-              placeholder="Valor do corte ex: 59.90"
-              size="lg"
-              type="text"
-              w="85%"
-              bg="gray.900"
-              mb={4}
-              value={price}
-              onChange={(e) => setPrice(e.target.value) }
-            />
-
-            <Button
-              onClick={handleRegister}
-              w="85%"
-              size="lg"
-              color="gray.900"
-              mb={6}
-              bg="button.cta"
-              _hover={{ bg: "#FFb13e" }}
-              disabled={!subscription && count >= 3}
-            >
-              Cadstrar
+          <Link href="/haircuts/new">
+            <Button color="barber.900">
+              Cadastrar novo
             </Button>
+          </Link>
 
-            {!subscription && count >= 3 && (
-              <Flex direction="row" align="center" justifyContent="center">
-                <Text>
-                  Você atingiou seu limite de corte.
+          <Stack ml="auto" align="center" direction="row">
+            <Text fontWeight="bold">ATIVOS</Text>
+            <Switch
+              colorScheme="green"
+              size="lg"
+              value={disableHaircut}
+              onChange={ (e: ChangeEvent<HTMLInputElement>) => handleDisable(e) }
+              isChecked={disableHaircut === 'disabled' ? false : true}
+            />
+          </Stack>
+
+         </Flex>
+
+
+        {haircutList.map(haircut => (
+          <Link key={haircut.id} href={`/haircuts/${haircut.id}`} legacyBehavior >
+            <Flex
+              cursor="pointer"
+              w="100%"
+              p={4}
+              bg="barber.400"
+              direction={isMobile ? "column" : "row"}
+              align={isMobile ? "flex-start" : "center"}
+              rounded="4"
+              mb={2}
+              justifyContent="space-between"
+            >
+  
+              <Flex mb={isMobile ? 2 : 0} direction="row" alignItems="center" justifyContent="center" >
+                <IoMdPricetag size={28} color="#fba931"/>
+                <Text fontWeight="bold" ml={4} noOfLines={2} color="white">
+                  {haircut.name}
                 </Text>
-                <Link href="/planos">
-                  <Text fontWeight="bold" color="#31FB6A" cursor="pointer" ml={1}>
-                    Seja premium
-                  </Text>
-                </Link>
               </Flex>
-            )}
+  
+              <Text fontWeight="bold" color="white">
+                Preço: R$ {haircut.price}
+              </Text>
+  
+            </Flex>
+          </Link>
+        ))}
 
-          </Flex>
 
         </Flex>
       </Sidebar>
@@ -159,28 +151,42 @@ export default function NewHaircut({ subscription, count }: NewHaircutProps){
   )
 }
 
+
 export const getServerSideProps = canSSRAuth(async (ctx) => {
 
   try{
+
     const apiClient = setupAPIClient(ctx);
+    const response = await apiClient.get('/haircuts',
+    {
+      params:{
+        status: true,
+      }
+    })
 
-    const response = await apiClient.get('/haircut/check')
-    const count = await apiClient.get('/haircut/count')
 
-    return {
+    if(response.data === null){
+      return{
+        redirect:{
+          destination: '/dashboard',
+          permanent: false,
+        }
+      }
+    }
+
+
+    return{
       props: {
-        subscription: response.data?.subscriptions?.status === 'active' ? true : false,
-        count: count.data
+        haircuts: response.data
       }
     }
 
   }catch(err){
     console.log(err);
-
     return{
       redirect:{
         destination: '/dashboard',
-        permanent:false,
+        permanent: false,
       }
     }
   }
