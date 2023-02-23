@@ -8,7 +8,7 @@ import {
   Input,
   Button
 } from '@chakra-ui/react'
-import { Sidebar } from '../../components/sidebar'
+import { Sidebar } from '../../components/sideBar/index'
 
 import Link from 'next/link'
 import { canSSRAuth } from '../../utils/canSSRAuth'

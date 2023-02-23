@@ -14,7 +14,7 @@ import Link from 'next/link'
 import { IoMdPerson } from 'react-icons/io'
 
 import { canSSRAuth } from '../../utils/canSSRAuth'
-import { Sidebar } from '../../components/sidebar'
+import { Sidebar } from '../../components/sideBar'
 import { setupAPIClient } from '../../services/api'
 import { ModalInfo } from '../../components/modal'
 
