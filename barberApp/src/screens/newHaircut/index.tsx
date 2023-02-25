@@ -1,62 +1,109 @@
-import React, { useState } from "react";
-import { View, Text } from "react-native";
+import React, { useState, useCallback } from "react";
+import { View, Text, TouchableOpacity } from "react-native";
 
 import { Button } from "@components/Button";
 import { Header } from "@components/Header";
 import { Input } from "@components/Input";
 import { useTheme } from "styled-components/native";
-import { Container, ContainerPicker, Content, Title } from "./styles";
-import { Picker } from "@react-native-picker/picker";
-import Icon from "react-native-vector-icons/MaterialIcons";
+import {
+  ButtonFlat,
+  Container,
+  ContainerFlat,
+  Content,
+  LimitReached,
+  TextFlatButton,
+  Title,
+} from "./styles";
+import { api } from "@services/api";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
 export function NewHaircut() {
   const { colors } = useTheme();
-  const [selectedOption, setSelectedOption] = useState(null);
-  const [options, setOptions] = useState([
-    { id: 1, name: "Opção 1" },
-    { id: 2, name: "Opção 2" },
-    { id: 3, name: "Opção 3" },
-  ]);
+  const [name, setName] = useState(" ");
+  const [price, setPrice] = useState(" ");
+  const navigation = useNavigation();
+  const [statusSubscriptions, setStatusSubscriptions] = useState(false);
+  const [count, setCount] = useState(0);
+
+  async function handleRegister() {
+    console.log("clicou");
+    if (name === " " || price === " ") {
+      return;
+    }
+    try {
+      await api.post("/haircut", {
+        name: name,
+        price: Number(price),
+      });
+      setName(" ");
+      setPrice(" ");
+      navigation.navigate("Cortes");
+    } catch (err) {
+      console.log(err);
+      alert("Erro ao cadastrar esse modelo.");
+    }
+  }
+
+  async function getSubscriptionsAndCount() {
+    const response = await api.get("/haircut/check");
+    const count = await api.get("/haircut/count");
+
+    setStatusSubscriptions(
+      response.data?.subscriptions?.status === "active" ? true : false
+    );
+    setCount(count.data);
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      getSubscriptionsAndCount();
+    }, [])
+  );
 
   return (
     <>
       <Header />
       <Container>
-        <Title>Novo corte</Title>
+        <Title>Cadastrar novo modelo</Title>
         <Content>
           <Input
-            placeholder="Nome do Cliente"
+            placeholder="Nome do corte"
             style={{
               borderWidth: 1,
               borderColor: colors.shape,
               borderStyle: "solid",
             }}
+            value={name}
+            onChangeText={setName}
           />
-          <ContainerPicker>
-            <Picker
-              selectedValue={selectedOption}
-              onValueChange={(value) => setSelectedOption(value)}
-              mode="dropdown"
-              style={{ color: "white", height: 40, width: "100%" }}
-            >
-              <Picker.Item label="Selecione uma opção" value={null} />
-              {options.map((option) => (
-                <Picker.Item
-                  key={option.id}
-                  label={option.name}
-                  value={option.id}
-                />
-              ))}
-            </Picker>
-            <Icon
-              name="arrow-drop-down"
-              size={24}
-              color="white"
-              style={{ position: "absolute", right: 10 }}
-            />
-          </ContainerPicker>
 
-          <Button onPress={() => {}} title="Cadastrar" />
+          <Input
+            placeholder="Valor do corte: 59.90"
+            style={{
+              borderWidth: 1,
+              borderColor: colors.shape,
+              borderStyle: "solid",
+            }}
+            value={price}
+            onChangeText={setPrice}
+            keyboardType="numeric"
+          />
+
+          <Button
+            onPress={handleRegister}
+            title="Cadastrar"
+            disabled={!statusSubscriptions && count >= 3 ? true : false}
+          />
+
+          {!statusSubscriptions && count >= 3 && (
+            <ContainerFlat>
+              <LimitReached>Você atingiu seu limite de corte.</LimitReached>
+
+              <ButtonFlat>
+                <TextFlatButton>Seja premium</TextFlatButton>
+              </ButtonFlat>
+            </ContainerFlat>
+          )}
         </Content>
       </Container>
     </>

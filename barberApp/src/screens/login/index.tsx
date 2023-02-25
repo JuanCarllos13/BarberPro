@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import {
   Container,
   Content,
@@ -13,9 +13,24 @@ import {
 import { Button } from "@components/Button";
 import { Input } from "@components/Input";
 import { useNavigation } from "@react-navigation/native";
+import { AuthContext } from "../../context/AuthContext";
 
 export function SignIn() {
   const navigation = useNavigation();
+  const { signIn } = useContext(AuthContext);
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  async function handleSignIn() {
+    if (email === "" || password === "") {
+      return;
+    }
+    await signIn({
+      email,
+      password,
+    });
+  }
 
   function handleNewAccount() {
     navigation.navigate("signUp");
@@ -29,10 +44,19 @@ export function SignIn() {
           <SubTitle>Pro</SubTitle>
         </Header>
 
-        <Input placeholder="Digite seu Email" />
-        <Input placeholder="Digite sua senha" secureTextEntry={true} />
+        <Input
+          placeholder="Digite seu Email"
+          value={email}
+          onChangeText={setEmail}
+        />
+        <Input
+          placeholder="Digite sua senha"
+          secureTextEntry={true}
+          value={password}
+          onChangeText={setPassword}
+        />
 
-        <Button onPress={() => {}} title="Login" />
+        <Button onPress={handleSignIn} title="Login" />
 
         <Footer>
           <RegisterText>Quero Cadastrar minha barbearia.</RegisterText>

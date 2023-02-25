@@ -12,6 +12,7 @@ import {
 import Theme from "./src/styles/theme";
 import { Routes } from "@routes/index";
 import { Home } from "@screens/home";
+import { AuthContextProvider } from "./src/context/AuthContext";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -31,8 +32,9 @@ export default function App() {
         translucent
         backgroundColor="transparent"
       />
-      <Routes />
-      {/* <Home/> */}
+      <AuthContextProvider>
+        <Routes />
+      </AuthContextProvider>
     </ThemeProvider>
   );
 }

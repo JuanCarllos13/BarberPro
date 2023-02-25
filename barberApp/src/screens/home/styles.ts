@@ -60,6 +60,8 @@ export const ContainerPerson = styled.View`
 
 export const Name = styled.Text`
   color: ${({ theme }) => theme.colors.text};
+  font-family:${({ theme }) => theme.fonts.primary_600} ;
+  font-size: 15px;
   margin-left: 4px;
 `
 
@@ -67,5 +69,6 @@ export const Price = styled.Text`
   color: ${({ theme }) => theme.colors.text};
   margin-left: 4px;
   margin-top: 10px;
-  font-family:  ${({ theme }) => theme.fonts.primary_400};
+  font-size: 15px;
+  font-family:  ${({ theme }) => theme.fonts.primary_600};
 `

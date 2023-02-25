@@ -1,5 +1,5 @@
-import React from "react";
-import { Text, View } from "react-native";
+import React, { useCallback, useState } from "react";
+import { FlatList, Text, View } from "react-native";
 import {
   ButtonRegister,
   Container,
@@ -15,15 +15,29 @@ import {
 } from "./styles";
 import Io from "react-native-vector-icons/Ionicons";
 import { Header } from "@components/Header";
-import { useNavigation } from "@react-navigation/native";
-import {Modal} from '@components/Modal'
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { Modal } from "@components/Modal";
+import { ScheduleItem } from "@dtos/ScheduleIDTO";
+import { api } from "@services/api";
 
 export function Home() {
   const navigation = useNavigation();
+  const [schedule, setSchedule] = useState<ScheduleItem[]>([]);
 
   function handleNewHaircut() {
-    navigation.navigate("NewHaircut");
+    navigation.navigate("Scheduling");
   }
+
+  async function getSchedule() {
+    const response = await api.get("/schedule");
+    setSchedule(response.data);
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      getSchedule();
+    }, [])
+  );
 
   return (
     <>
@@ -38,22 +52,28 @@ export function Home() {
           </ButtonRegister>
         </ContainerTitle>
 
-        <ContainerButton>
-          <ContainerButtonFlex>
-            <ContainerPersonName>
-              <ContainerPerson>
-                <Io name="person" size={20} color="#f1f1f1" />
-                <Name>Juan Carlos</Name>
-              </ContainerPerson>
+        <FlatList
+          data={schedule}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <ContainerButton>
+              <ContainerButtonFlex>
+                <ContainerPersonName>
+                  <ContainerPerson>
+                    <Io name="person" size={20} color="#f1f1f1" />
+                    <Name>{item.customer}</Name>
+                  </ContainerPerson>
 
-              <Name>Corte de cabelo</Name>
-            </ContainerPersonName>
-            <Price>R$ 59.90</Price>
-          </ContainerButtonFlex>
-        </ContainerButton>
+                  <Name>{item.haircut.name}</Name>
+                </ContainerPersonName>
+                <Price>R$ {item.haircut.price}</Price>
+              </ContainerButtonFlex>
+            </ContainerButton>
+          )}
+        />
       </Container>
 
-      <Modal modalVisible={true} setModalVisible={()=> {}}/>
+      <Modal modalVisible={false} setModalVisible={() => {}} />
     </>
   );
 }

@@ -2,30 +2,29 @@ import prismaClient from "../../prisma";
 import { compare } from 'bcryptjs'
 import { sign } from 'jsonwebtoken'
 
-interface AuthUserRequest{
+interface AuthUserRequest {
   email: string;
   password: string;
-} 
+}
 
-class AuthUserService{
-  async execute({ email, password }: AuthUserRequest){
-
+class AuthUserService {
+  async execute({ email, password }: AuthUserRequest) {
     const user = await prismaClient.user.findFirst({
-      where:{
+      where: {
         email: email
       },
-      include:{
+      include: {
         subscriptions: true,
       }
     })
 
-    if(!user){
+    if (!user) {
       throw new Error("Email/password incorrect")
     }
 
     const passwordMatch = await compare(password, user?.password)
 
-    if(!passwordMatch){
+    if (!passwordMatch) {
       throw new Error("Email/password incorrect")
     }
 
@@ -40,7 +39,7 @@ class AuthUserService{
         expiresIn: '30d'
       }
     )
-    
+
 
     return {
       id: user?.id,
@@ -52,7 +51,7 @@ class AuthUserService{
         id: user?.subscriptions?.id,
         status: user?.subscriptions?.status
       } : null
-     }
+    }
   }
 }
 

@@ -1,7 +1,7 @@
 import { useState, ChangeEvent } from 'react'
 
 import Head from 'next/head';
-import { Sidebar } from '../../components/sidebar'
+import { Sidebar } from '../../components/sideBar'
 import {
   Flex,
   Text,

@@ -7,11 +7,12 @@ interface ButtonProps extends TouchableOpacityProps{
   title: string,
   titleColor?: string
   onPress: () => void
+  disabled?: boolean
 }
 
-export function Button({onPress, title, titleColor, ...rest}: ButtonProps){
+export function Button({onPress, title, titleColor,disabled, ...rest}: ButtonProps){
   return (
-    <Container onPress={onPress} {...rest}>
+    <Container onPress={onPress} {...rest} disabled={disabled}>
       <Title color={titleColor}>{title}</Title>
     </Container>
   )

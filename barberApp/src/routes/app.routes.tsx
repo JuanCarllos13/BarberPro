@@ -5,8 +5,10 @@ import { useTheme } from "styled-components/native";
 
 import Feather from "react-native-vector-icons/Feather";
 import { Home } from "@screens/home";
-import { NewHaircut } from "@screens/newHaircut";
+import { Scheduling } from "@screens/Scheduling";
 import { Haircut } from "@screens/haircut";
+import { NewHaircut } from "@screens/NewHaircut";
+import { EditCut } from "@screens/editCut";
 import { Profile } from "@screens/profile";
 
 const { Navigator, Screen } = createBottomTabNavigator();
@@ -29,6 +31,7 @@ export function AppRoutes() {
           borderTopWidth: 0,
         },
       }}
+      initialRouteName={"Home"}
     >
       <Screen
         name="Agenda"
@@ -61,8 +64,20 @@ export function AppRoutes() {
       />
 
       <Screen
-        name="NewHaircut"
+        name="Scheduling"
+        component={Scheduling}
+        options={{ tabBarButton: () => null }}
+      />
+
+      <Screen
+        name="newHaircut"
         component={NewHaircut}
+        options={{ tabBarButton: () => null }}
+      />
+
+      <Screen
+        name="EditCut"
+        component={EditCut}
         options={{ tabBarButton: () => null }}
       />
     </Navigator>

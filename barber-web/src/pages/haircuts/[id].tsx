@@ -11,7 +11,7 @@ import {
   Switch
 } from '@chakra-ui/react'
 
-import { Sidebar } from '../../components/sidebar'
+import { Sidebar } from '../../components/sideBar'
 import { FiChevronLeft } from 'react-icons/fi'
 import Link from 'next/link'
 
