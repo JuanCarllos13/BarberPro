@@ -99,7 +99,7 @@ export function NewHaircut() {
             <ContainerFlat>
               <LimitReached>Você atingiu seu limite de corte.</LimitReached>
 
-              <ButtonFlat>
+              <ButtonFlat onPress={() => navigation.navigate("Plans")}>
                 <TextFlatButton>Seja premium</TextFlatButton>
               </ButtonFlat>
             </ContainerFlat>

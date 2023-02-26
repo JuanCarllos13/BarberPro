@@ -18,7 +18,7 @@ import {
 } from "./styles";
 import { UserDTO } from "../../dtos/userDTO";
 import { api } from "@services/api";
-import { useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
 export function Profile() {
   const { colors } = useTheme();
@@ -27,6 +27,9 @@ export function Profile() {
 
   const [name, setName] = useState(user && user.name);
   const [address, setAddress] = useState(user?.endereco ? user?.endereco : "");
+  const [premium, setPremium] = useState(false);
+
+  const navigation = useNavigation();
 
   async function handleLogout() {
     await logoutUser();
@@ -57,6 +60,10 @@ export function Profile() {
       email: response.data.email,
       endereco: response.data?.endereco,
     });
+
+    setPremium(
+      response.data?.subscriptions?.status === "active" ? true : false
+    );
   }
 
   useFocusEffect(
@@ -99,9 +106,11 @@ export function Profile() {
 
             <TextInfoProfile>Plano atual:</TextInfoProfile>
             <ContainerFlat>
-              <FlatText>Plano grátis</FlatText>
+              <FlatText style={{ color: premium ? "#FBA931" : "#4dffb4" }}>
+                Plano {premium ? "Premium" : "Grátis"}
+              </FlatText>
 
-              <ButtonFlat>
+              <ButtonFlat onPress={() => navigation.navigate("Plans")}>
                 <ButtonFlatText>Mudar Plano</ButtonFlatText>
               </ButtonFlat>
             </ContainerFlat>

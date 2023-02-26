@@ -23,6 +23,14 @@ import { api } from "@services/api";
 export function Home() {
   const navigation = useNavigation();
   const [schedule, setSchedule] = useState<ScheduleItem[]>([]);
+  const [service, setService] = useState<ScheduleItem>({} as ScheduleItem);
+
+  const [modalVisibly, setModalVisibly] = useState(false);
+
+  function handleOpenModal(item: ScheduleItem) {
+    setService(item);
+    setModalVisibly(true);
+  }
 
   function handleNewHaircut() {
     navigation.navigate("Scheduling");
@@ -31,6 +39,29 @@ export function Home() {
   async function getSchedule() {
     const response = await api.get("/schedule");
     setSchedule(response.data);
+  }
+
+  async function handleFinish(id: string){
+    try{
+      await api.delete('/schedule', {
+        params:{
+          schedule_id: id
+        }
+      })
+
+
+      const filterItem = schedule.filter(item => {
+        return (item?.id !== id)
+      })
+
+      setSchedule(filterItem)
+  setModalVisibly(false)
+
+    }catch(err){
+      console.log(err);
+  setModalVisibly(false)
+      alert("Erro ao finalizar este serviço")
+    }
   }
 
   useFocusEffect(
@@ -56,7 +87,7 @@ export function Home() {
           data={schedule}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
-            <ContainerButton>
+            <ContainerButton onPress={() => handleOpenModal(item)}>
               <ContainerButtonFlex>
                 <ContainerPersonName>
                   <ContainerPerson>
@@ -73,7 +104,12 @@ export function Home() {
         />
       </Container>
 
-      <Modal modalVisible={false} setModalVisible={() => {}} />
+      <Modal
+        modalVisible={modalVisibly}
+        setModalVisible={() => setModalVisibly(!modalVisibly)}
+        data={service}
+        finishService={() => handleFinish(service?.id)}
+      />
     </>
   );
 }

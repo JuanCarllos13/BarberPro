@@ -8,6 +8,7 @@ export declare global {
       newHaircut: undefined;
       Cortes: undefined
       EditCut: {id: string}
+      Plans: undefined
     }
   }
 }

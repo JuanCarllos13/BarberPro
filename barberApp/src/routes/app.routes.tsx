@@ -10,6 +10,7 @@ import { Haircut } from "@screens/haircut";
 import { NewHaircut } from "@screens/NewHaircut";
 import { EditCut } from "@screens/editCut";
 import { Profile } from "@screens/profile";
+import { Plans } from "@screens/plans";
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -78,6 +79,11 @@ export function AppRoutes() {
       <Screen
         name="EditCut"
         component={EditCut}
+        options={{ tabBarButton: () => null }}
+      />
+        <Screen
+        name="Plans"
+        component={Plans}
         options={{ tabBarButton: () => null }}
       />
     </Navigator>

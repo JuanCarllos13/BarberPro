@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { Button, Flex, Heading, Text, useMediaQuery } from "@chakra-ui/react";
 
-import { Sidebar } from "../../components/sidebar";
+import { Sidebar } from "../../components/sideBar";
 import { canSSRAuth } from "../../utils/canSSRAuth";
 import { setupAPIClient } from "../../services/api";
 import { getStripeJs } from "../../services/stripe-js";

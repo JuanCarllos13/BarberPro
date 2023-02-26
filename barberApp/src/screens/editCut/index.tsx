@@ -138,15 +138,15 @@ export function EditCut() {
             onPress={handleUpdate}
             title="Cadastrar"
             disabled={
-              statusSubscriptions.subscriptions.status !== "active"
+              statusSubscriptions?.subscriptions?.status !== "active"
                 ? true
                 : false
             }
           />
 
-          {statusSubscriptions.subscriptions.status !== "active" && (
+          {statusSubscriptions?.subscriptions?.status !== "active" && (
             <ContainerFlat>
-              <ButtonFlat>
+              <ButtonFlat onPress={() => navigation.navigate("Plans")}>
                 <TextFlatButton>Seja premium</TextFlatButton>
               </ButtonFlat>
 
