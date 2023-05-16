@@ -1,38 +1,89 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<h3 align="center">
+  Projeto criado com o intuito de mostrar meus conhecimentos ao decorrer da minha carreira.
+</h3>
 
-## Getting Started
 
-First, run the development server:
+## 📝 Sobre o projeto
+
+O projeto é um sistema completo para gerenciamento de uma barbearia, permitindo que o dono da loja crie uma conta para sua empresa. A aplicação permite que o dono cadastre até 3 modelos de corte de cabelo, pois quando ele cria sua conta, automaticamente recebe um plano grátis. No plano gratuito, ele pode agendar horários para clientes, escolhendo um dos 3 tipos de corte cadastrados.
+
+A tela inicial exibe todos os cortes e seus respectivos clientes agendados. Ao clicar em um corte, um modal é aberto, oferecendo a opção de finalizar o corte caso já tenha sido realizado.
+
+Para que o usuário altere seu plano, ele deve acessar o botão de perfil, onde encontrará a opção "Mudar Plano". Ao selecionar essa opção, ele será redirecionado para a tela de checkout do Stripe, onde poderá assinar um plano mensal de R$10,00.
+
+No plano Premium, o usuário poderá cadastrar quantos modelos de corte desejar, além de ter a opção de habilitar e desabilitar cortes conforme sua preferência.
+
+<hr>
+
+## 🚀 Como executar o projeto.
+
+Este projeto é divido em uma parte:
+1
+💡O Backend deve estar rodando em sua máquina para que o frontend seja renderizado.
+
+### Pré-requisitos
+
+Antes de começar, você vai precisar ter instalado em sua máquina as seguintes ferramentas:
+[Git](https://git-scm.com), [Node.js](https://nodejs.org/en/).
+Além disto é bom ter um editor para trabalhar com o código como [VSCode](https://code.visualstudio.com/)
+
+<br>
+
+#### 🎲 Rodando a aplicação (Frontend)
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+# Clone este repositório
+$ https://github.com/JuanCarllos13/BarberPro
+# Acesse a pasta do projeto no terminal/cmd
+$ cd + sua pasta + git clone https://github.com/JuanCarllos13/BarberPro
+# Instale as dependências com:
+$ yarn
+# Rode a aplicação em modo de desenvolvimento:
+$  yarn dev
+# O servidor inciará na porta:3000 - acesse <   localHost:3000
+
+# Para realizar a compra, utilizar o número de cartão
+$ 4242 4242 4242 4242
+# Uma data posterior a atual e qualquer número de CVV.
+
+# Lembrando que para funcionar o back-end dessa aplicação precisa tá rodando também.
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📚 Funcionalidades
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+- Cadastrar modelo de corte de cabelo
+- Registar corte
+- Finalizar corte do cliente
+- Desabilitar e habilitar corte caso seja premium
+- Realizar o checkout via stripe
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+<hr>
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## 👩🏻‍💻 Tecnologias
 
-## Learn More
+- ReactJs
+- Next.js
+- Chakra-ui
+- Typescript
+- Stripe
 
-To learn more about Next.js, take a look at the following resources:
+<hr>
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 👨‍💻 Autor<br>
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/JuanCarllos13">
+        <img src="https://github.com/JuanCarllos13.png" width="150px;" height="150px" alt="Foto do Juan no GitHub"/><br>
+        <sub>
+          <b>JUAN CARLOS</b>
+        </sub>
+      </a>
+    </td>
+  </tr>
+</table>
+</table>
+<hr>
