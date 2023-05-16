@@ -3,6 +3,11 @@
 </h3>
 
 
+https://github.com/JuanCarllos13/BarberPro/assets/86435195/98213a68-e3e3-41e1-87b5-f8a2e06edbe7
+
+
+
+
 ## 📝 Sobre o projeto
 
 O projeto é um sistema completo para gerenciamento de uma barbearia, permitindo que o dono da loja crie uma conta para sua empresa. A aplicação permite que o dono cadastre até 3 modelos de corte de cabelo, pois quando ele cria sua conta, automaticamente recebe um plano grátis. No plano gratuito, ele pode agendar horários para clientes, escolhendo um dos 3 tipos de corte cadastrados.
